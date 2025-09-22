@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Automate your Twitter activity including following, unfollowing, liking tweets, retweeting, and commenting. Manage your Twitter experience seamlessly with smart scheduling and proxy management.">
+    <title>Twitter Bot: Automate Your Twitter Experience</title>
+    <link rel="canonical" href="https://github.com/Appilot123/twitter-bot">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- SEO Meta Tags -->
+    <meta property="og:title" content="Twitter Bot: Automate Your Twitter Experience">
+    <meta property="og:description" content="Boost your Twitter presence with automated actions like following, unfollowing, liking, retweeting, and commenting. Schedule activities, use proxies for anonymity, and track engagement metrics.">
+    <meta property="og:image" content="https://github.com/Appilot123/twitter-bot/raw/main/docs/twitter-bot.png">
+    <meta property="og:url" content="https://github.com/Appilot123/twitter-bot">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Twitter Bot: Automate Your Twitter Experience">
+    <meta name="twitter:description" content="Boost your Twitter game with automated swipes, instant messages, and profile updates.">
+    <meta name="twitter:image" content="https://github.com/Appilot123/twitter-bot/raw/main/docs/twitter-bot.png">
+
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1a202c;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        nav ul li a.github-link {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+
+        nav ul li a.github-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff08" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        #hero .container {
+            max-width: 1000px;
+            position: relative;
+            z-index: 2;
+        }
+
+        #hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        #hero p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: white;
+        }
+
+        /* Section Base */
+        section {
+            padding: 5rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #718096;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Section */
+        #features {
+            background: white;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #718096;
+            line-height: 1.7;
+        }
+
+        /* Pricing Section */
+        #pricing {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .pricing-card.featured {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-card .price-period {
+            color: #718096;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card .price-description {
+            color: #718096;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Testimonials Section */
+        #testimonials {
+            background: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 3rem 2.5rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            font-size: 4rem;
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            opacity: 0.3;
+        }
+
+        .testimonial-card blockquote {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        #cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        #cta h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        #cta p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #cta .cta-button {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        footer h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        footer p {
+            color: #a0aec0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            nav ul li a {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .features-grid,
+            .pricing-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .feature-card,
+            .pricing-card,
+            .testimonial-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+    <div class="container">
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="https://github.com/Appilot123/twitter-bot" target="_blank" class="github-link">
+                <i class="fab fa-github"></i> GitHub
+            </a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="hero">
+    <div class="container">
+        <h1>Automate Your Twitter Experience</h1>
+        <p>Transform your social media strategy with intelligent automation. Boost engagement, grow your following, and save countless hours with our advanced Twitter bot.</p>
+        <a href="#cta" class="cta-button">
+            <i class="fas fa-rocket"></i>
+            Get Started Free
+        </a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features">
+    <div class="container">
+        <div class="section-title fade-in-up">
+            <h2>Powerful Features</h2>
+            <p>Everything you need to supercharge your Twitter presence with intelligent automation</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card fade-in-up">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Smart Following</h3>
+                <p>Intelligently follow and unfollow users based on advanced targeting criteria. Build authentic connections with your ideal audience automatically.</p>
+            </div>
+            <div class="feature-card fade-in-up">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Engagement Automation</h3>
+                <p>Automatically like, retweet, and engage with relevant content. Boost your visibility and build relationships effortlessly.</p>
+            </div>
+            <div class="feature-card fade-in-up">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>Smart Scheduling</h3>
+                <p>Schedule posts and actions for optimal engagement times. Maintain consistent presence even when you're offline.</p>
+            </div>
+            <div class="feature-card fade-in-up">
+                <div class="feature-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>Global Reach</h3>
+                <p>Multi-language support and global targeting capabilities. Connect with audiences worldwide in their preferred language.</p>
+            </div>
+            <div class="feature-card fade-in-up">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Advanced Security</h3>
+                <p>Built-in proxy support and fingerprint management. Keep your accounts safe with advanced anti-detection measures.</p>
+            </div>
+            <div class="feature-card fade-in-up">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Analytics Dashboard</h3>
+                <p>Comprehensive tracking and reporting. Monitor your growth, engagement rates, and ROI with detailed analytics.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing">
+    <div class="container">
+        <div class="section-title fade-in-up">
+            <h2>Choose Your Plan</h2>
+            <p>Flexible pricing options to suit every need, from individual creators to enterprise teams</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card fade-in-up">
+                <h3>Starter</h3>
+                <div class="price">$9<span style="font-size: 1rem; font-weight: 400;">.99</span></div>
+                <div class="price-period">per month</div>
+                <div class="price-description">Perfect for beginners looking to automate basic Twitter activities and grow their presence.</div>
+                <p><strong>50 actions/day</strong> • Basic analytics • Email support</p>
+            </div>
+            <div class="pricing-card featured fade-in-up">
+                <h3>Professional</h3>
+                <div class="price">$19<span style="font-size: 1rem; font-weight: 400;">.99</span></div>
+                <div class="price-period">per month</div>
+                <div class="price-description">Ideal for serious content creators and businesses ready to scale their Twitter strategy.</div>
+                <p><strong>200 actions/day</strong> • Advanced analytics • Priority support • Proxy management</p>
+            </div>
+            <div class="pricing-card fade-in-up">
+                <h3>Enterprise</h3>
+                <div class="price">Custom</div>
+                <div class="price-period">pricing</div>
+                <div class="price-description">Tailored solutions for large organizations with complex automation needs and compliance requirements.</div>
+                <p><strong>Unlimited actions</strong> • Custom integrations • Dedicated support • SLA guarantee</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials">
+    <div class="container">
+        <div class="section-title fade-in-up">
+            <h2>What Our Users Say</h2>
+            <p>Join thousands of satisfied users who have transformed their Twitter presence</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-in-up">
+                <blockquote>This bot has completely revolutionized my Twitter strategy. I've grown my following by 300% in just two months while maintaining authentic engagement. The automation feels natural and the analytics are incredibly detailed.</blockquote>
+                <div class="testimonial-author">— Sarah Thompson, Digital Marketer</div>
+            </div>
+            <div class="testimonial-card fade-in-up">
+                <blockquote>The proxy management and security features are outstanding. I can manage multiple accounts safely without any concerns. The customer support team is also incredibly responsive and knowledgeable.</blockquote>
+                <div class="testimonial-author">— John Davidson, Social Media Manager</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section id="cta">
+    <div class="container">
+        <h2>Ready to Transform Your Twitter Presence?</h2>
+        <p>Join thousands of users who are already automating their success. Start your free trial today and experience the power of intelligent Twitter automation.</p>
+        <a href="https://github.com/Appilot123/twitter-bot" class="cta-button">
+            <i class="fas fa-download"></i>
+            Start Free Trial
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer id="contact">
+    <div class="container">
+        <h2>Get In Touch</h2>
+        <p>Have questions or need support? Our team is here to help you succeed. Reach out to us at <a href="mailto:support@appilot.com">support@appilot.com</a> or explore our comprehensive documentation.</p>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all fade-in-up elements
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
