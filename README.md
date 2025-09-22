@@ -1,5 +1,12 @@
 #  Twitter Bot – Automate Swiping, Messaging, and Profile Management
 
+
+<p align="center">
+  <a href="https://github.com/yourusername/twitter-bot">
+    <img src="https://img.shields.io/badge/Try%20It%20Free-1E90FF?style=for-the-badge&logo=fire&logoColor=white" alt="Try it Free" width="30%">
+  </a>
+</p>
+
 <p align="center">
   <a href="https://discord.gg/vBu9huKBvy">
     <img src="https://img.shields.io/badge/Join-Discord-5865F2?logo=discord" alt="Join Discord">
@@ -24,6 +31,11 @@ This project automates actions like:
 
 ---
 
+<p align="center">
+  <img src="twitter-bot.png" alt="Twitter Bot Hero Image" />
+</p>
+
+
 ##  Features
 
 | **Feature**                     | **Description**                                                                                              |
@@ -40,6 +52,11 @@ This project automates actions like:
 
 ---
 
+## Architecture
+<p align="center">
+  <img src="twitter-bot-architecture.png" alt="Twitter Bot Hero Image" />
+</p>
+
 ##  Target Audience
 This bot is perfect for:
 - **Social Media Managers** wanting to automate engagement on Twitter.
@@ -49,15 +66,22 @@ This bot is perfect for:
 
 ---
 
-##  Keywords
-`twitter bot`, `twitter automation`, `twitter swiping bot`, `auto tweet bot`, `tweeter follow bot`, `auto like bot`, `twitter engagement bot`, `proxy twitter bot`
-
----
-
-## 🧑‍💻 Setup Instructions
+##  Setup Instructions
 
 ### 1. **Clone the repository**:
 ```bash
 git clone https://github.com/yourusername/twitter-bot.git
 cd twitter-bot
+install recomended apk in your phone
+then signup to appilot.com twitter bot 
+then connect your phone and setup automation 
+```
+
+##  **Contact Details**
+
+-  [Join our Discord Community](https://discord.gg/vBu9huKBvy)  
+-  [Contact via Telegram](https://t.me/devpilot1)  
+
+
+
 
